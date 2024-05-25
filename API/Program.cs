@@ -17,7 +17,7 @@ builder.Services.AddDbContext<DataContext>(opt=>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));    
 });
-
+builder.Services.AddCors();
 var app = builder.Build();
  
 app.UseHttpsRedirection();
@@ -25,7 +25,9 @@ app.UseHttpsRedirection();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-
+//Configure the HTTP request pipeline
+// middleware order is must important
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 app.MapControllers();
 
 app.Run();
